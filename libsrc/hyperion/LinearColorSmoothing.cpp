@@ -28,6 +28,9 @@ ALWAYS_INLINE long clampRounded(const floatT x) {
 /// The number of bits that are used for shifting the fixed point values
 const int FPShift = (sizeof(uint64_t)*8 - (12 + 9));
 
+/// The value 2 to the power of FPShift
+const uint64_t FPBasis = (static_cast<uint64_t>(1l) << FPShift);
+
 /// The number of bits that are reduce the shifting when converting from fixed to floating point. 8 bits = 256 values
 const int SmallShiftBis = sizeof(uint8_t)*8;
 
@@ -270,7 +273,7 @@ void LinearColorSmoothing::assembleFrame()
 
 ALWAYS_INLINE void LinearColorSmoothing::aggregateComponents(const std::vector<ColorRgb>& colors, std::vector<uint64_t>& weighted, const floatT weight) {
 	// Determine the integer-scale by converting the weight to fixed point
-	const uint64_t scale = (1l<<FPShift) * static_cast<double>(weight);
+	const uint64_t scale = FPBasis * static_cast<double>(weight);
 
 	const size_t N = colors.size();
 
